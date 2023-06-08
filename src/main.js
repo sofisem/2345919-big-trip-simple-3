@@ -14,3 +14,4 @@ const tripPointsModel = new TripPointModel(tripPoints);
 const tripPresenter = new TripPresenter({tripContainer: eventsTemplate, tripPointsModel});
 render(new FiltersView(), filtersTemlate);
 tripPresenter.init();
+//3.2 changes
