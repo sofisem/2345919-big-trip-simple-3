@@ -1,5 +1,5 @@
 import { destinations } from '../mock/destination.js';
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { getFormDate, capitalizeType, getItemByIDFromItems } from '../util.js';
 import { getOffersByType } from '../mock/const.js';
 
@@ -146,11 +146,11 @@ function createCreatingFormTemplate(tripPoint) {
   );
 }
 
-export default class CreatingFormView {
-  #element = null;
+export default class CreatingFormView extends AbstractView{
   #tripPoint = null;
 
   constructor(tripPoint) {
+    super();
     this.#tripPoint = tripPoint;
   }
 
@@ -158,15 +158,4 @@ export default class CreatingFormView {
     return createCreatingFormTemplate(this.#tripPoint);
   }
 
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement(){
-    this.element = null;
-  }
 }

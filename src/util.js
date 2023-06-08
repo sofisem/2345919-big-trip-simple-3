@@ -31,7 +31,7 @@ export const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export const getEventDateTime = (date) => date.substring(0, date.indexOf('T'));
 export const getEventDate = (date) => dayjs(date).format(DATE_FORMAT);
-export const getDateTime = (date) => date.substring(0, date.indexOf('.'));
+export const getDateTime = (date) => date.substring(0, date.lastIndexOf(':'));
 export const getTime = (date) => dayjs(date).format(TIME_FORMAT);
 export const getBasicime = (date) => dayjs(date).format(BASE_DATE_FORMAT);
 export const capitalizeType = (type) => type.charAt(0).toUpperCase() + type.slice(1);

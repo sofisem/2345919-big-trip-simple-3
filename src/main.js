@@ -1,8 +1,8 @@
 import TripPresenter from './presenter/presenter.js';
-import { render } from './render.js';
 import FiltersView from './view/filters-view.js';
 import TripPointModel from './model/point-model.js';
 import { mockInit, tripPoints } from './mock/point.js';
+import {render} from './framework/render.js';
 
 
 const eventsTemplate = document.querySelector('.trip-events');
