@@ -4,11 +4,15 @@ import NoPointsView from '../view/no-points-view.js';
 import {RenderPosition, render} from '../framework/render.js';
 import TripPointPresenter from './trip-point-presenter';
 import RoutePointListView from '../view/route-point-list-view.js';
+import { SortType } from '../mock/const.js';
+import { sortPointsByDate, sortPointsByPrice } from '../utils/sorts.js';
 
 export default class TripPresenter {
   #tripContainer = null;
   #tripPointsModel = null;
   #tripPoints = null;
+  #currentSortType = SortType.DAY;
+  #sourcedTripPoints = [];
 
   #tripPointsListComponent = new RoutePointListView();
   #noTripPointComponent = new NoPointsView();
@@ -23,15 +27,46 @@ export default class TripPresenter {
   init() {
     this.#tripPoints = [...this.#tripPointsModel.tripPoints];
     this.#renderBoard();
+    this.#sourcedTripPoints = [...this.#tripPointsModel.tripPoints];
   }
 
   #renderSort() {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderNoTripPoints() {
     render(this.#noTripPointComponent, this.#tripContainer, RenderPosition.AFTERBEGIN );
   }
+
+  #sortTripPoints(sortType) {
+    switch (sortType) {
+      case SortType.PRICE:
+        this.#tripPoints.sort(sortPointsByPrice);
+        break;
+      case SortType.TIME:
+        this.#tripPoints.sort(sortPointsByDate);
+        break;
+      default:
+        this.#tripPoints = [...this.#sourcedTripPoints];
+    }
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    // - сортируем задачи
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortTripPoints(sortType);
+
+    // - очищаем список
+    // - рисуем ему заново
+    this.#clearTripPointList();
+    this.#renderTripPointsList();
+  };
+
 
   #handleModeChange = () => {
     this.#tripPointPresenter.forEach((presenter) => presenter.resetView());

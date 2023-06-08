@@ -34,7 +34,7 @@ export default class TripPointPresenter {
       onEditClick: this.#handleEditClick
     });
 
-    this.#editFormComponent = new Editing({
+    this.#editFormComponent = new EditingForm({
       tripPoint,
       onFormSubmit: this.#handleFormSubmit
     });
