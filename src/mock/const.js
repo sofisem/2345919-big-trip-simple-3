@@ -204,4 +204,17 @@ const getOffersByType = (type) => {
   }
 };
 
-export { EVENT_TYPES, DESCRIPTIONS, NAMES_OF_CITIES, fromToDates, getOffersByType, offersByType};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future'
+};
+
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
+};
+
+export { EVENT_TYPES, DESCRIPTIONS, NAMES_OF_CITIES, fromToDates, getOffersByType, offersByType, FilterType, SortType};
