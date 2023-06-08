@@ -2,7 +2,7 @@
 import { generateRandomElementFromArray, createIDgenerator } from '../utils/util.js';
 import { DESCRIPTIONS, NAMES_OF_CITIES} from './const';
 
-const NUMBER_OF_PICTURES = Math.floor(Math.random() * 6) + 1;
+
 const destinations = [];
 const generateImageId = createIDgenerator();
 const generatePictures = () => {
