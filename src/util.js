@@ -36,5 +36,6 @@ export const getTime = (date) => dayjs(date).format(TIME_FORMAT);
 export const getBasicime = (date) => dayjs(date).format(BASE_DATE_FORMAT);
 export const capitalizeType = (type) => type.charAt(0).toUpperCase() + type.slice(1);
 export const getFormDate = (date) => dayjs(date).format(FULL_DATE_FORMAT);
+export const isTripDateBeforeToday = (date) => dayjs(date).isBefore(dayjs(), 'D') || dayjs(date).isSame(dayjs(), 'D');
 
 

@@ -6,17 +6,17 @@ import CreatingFormView from '../view/creating-form-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import {render, replace} from '../framework/render.js';
 import { isEscapeKey } from '../util.js';
-// eslint-disable-next-line no-console
-console.log('hi');
 
 export default class TripPresenter {
   #tripContainer = null;
   #tripPointsModel = null;
   #eventListComponent = null;
+  #sorters = null;
 
-  constructor({tripContainer, tripPointsModel}) {
+  constructor({tripContainer, tripPointsModel, sorters}) {
     this.#tripContainer = tripContainer;
     this.#tripPointsModel = tripPointsModel;
+    this.#sorters = sorters;
   }
 
   init() {
@@ -25,7 +25,7 @@ export default class TripPresenter {
       render(new NoPointsView(), this.#tripContainer);
     } else {
       this.#eventListComponent = new RoutePointListView();
-      render(new SortView(), this.#tripContainer);
+      render(new SortView(this.#sorters), this.#tripContainer);
       render(this.#eventListComponent, this.#tripContainer);
       render(new CreatingFormView(tripPoints[0]), this.#eventListComponent.element);
       for (let i = 1; i < tripPoints.length - 1; i++) {
