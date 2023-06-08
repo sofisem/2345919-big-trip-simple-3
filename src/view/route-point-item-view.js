@@ -1,4 +1,5 @@
-import { getEventDateTime, getEventDate, getDateTime, getTime, capitalizeType, getItemByIDFromItems } from '../util.js';
+import { capitalizeType, getItemByIDFromItems } from '../utils/util.js';
+import { getEventDateTime, getEventDate, getDateTime, getTime } from '../utils/format-time-utils.js';
 import { destinations } from '../mock/destination.js';
 import { getOfferById } from '../mock/offers.js';
 import AbstractView from '../framework/view/abstract-view.js';
@@ -48,13 +49,12 @@ function createTripPointTemplate(tripPoint) {
 
 export default class RoutePointItemView extends AbstractView {
   #tripPoint = null;
-  #сlickEditHandler = null;
 
   constructor(options) {
     super();
     const { tripPoint, onEditClick } = options;
     this.#tripPoint = tripPoint;
-    this.#сlickEditHandler = onEditClick;
+    this._callback.onEditClick = onEditClick;
     const rollupBtn = this.element.querySelector('.eventrollup-btn');
     rollupBtn.addEventListener('click', this.#editClickHandler);
   }
@@ -67,7 +67,7 @@ export default class RoutePointItemView extends AbstractView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#сlickEditHandler();
+    this._callback.onEditClick();
   };
 
 }

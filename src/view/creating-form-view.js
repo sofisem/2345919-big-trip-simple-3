@@ -1,16 +1,17 @@
 import { destinations } from '../mock/destination.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { getFormDate, capitalizeType, getItemByIDFromItems } from '../util.js';
-import { getOffersByType } from '../mock/const.js';
+import { capitalizeType, getItemByIDFromItems} from '../utils/util.js';
+import { getOffersByType } from '../mock/offers.js';
+import { getFormDate } from '../utils/format-time-utils.js';
 
 
-function createOffersTemplate(offers, type) {
+function createOffersTemplate(offers, type, id) {
   return getOffersByType(type).map((offer) => {
     const isOfferChecked = offers.includes(offer.id) ? 'checked' : '';
     return `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${isOfferChecked}>
-      <label class="event__offer-label" for="event-offer-luggage-1">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title.split(' ').at(-1)}-${id}-${id}" type="checkbox" name="event-offer-${offer.title.split(' ').at(-1)}-${id}" ${isOfferChecked}>
+    <label class="event__offer-label" for="event-offer-${offer.title.split(' ').at(-1)}-${id}-${id}">
       <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
@@ -32,59 +33,59 @@ function createCreatingFormTemplate(tripPoint) {
     <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
-        <label class="event__type  event__type-btn" for="event-type-toggle-1">
+        <label class="event__type  event__type-btn" for="event-type-toggle-${tripPoint.id}">
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${tripPoint.type}.png" alt="${tripPoint.type} icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${tripPoint.id}" type="checkbox">
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
 
             <div class="event__type-item">
-              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+              <input id="event-type-taxi-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-${tripPoint.id}">Taxi</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-              <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+              <input id="event-type-bus-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+              <label class="event__type-label  event__type-label--bus" for="event-type-bus-${tripPoint.id}">Bus</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-              <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
+              <input id="event-type-train-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+              <label class="event__type-label  event__type-label--train" for="event-type-train-${tripPoint.id}">Train</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-              <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
+              <input id="event-type-ship-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+              <label class="event__type-label  event__type-label--ship" for="event-type-ship-${tripPoint.id}">Ship</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-              <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
+              <input id="event-type-drive-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+              <label class="event__type-label  event__type-label--drive" for="event-type-drive-${tripPoint.id}">Drive</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-              <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
+              <input id="event-type-flight-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+              <label class="event__type-label  event__type-label--flight" for="event-type-flight-${tripPoint.id}">Flight</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-              <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+              <input id="event-type-check-in-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+              <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-${tripPoint.id}">Check-in</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+              <input id="event-type-sightseeing-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-${tripPoint.id}">Sightseeing</label>
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
+              <input id="event-type-restaurant-${tripPoint.id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-${tripPoint.id}">Restaurant</label>
             </div>
           </fieldset>
         </div>
@@ -94,8 +95,8 @@ function createCreatingFormTemplate(tripPoint) {
         <label class="event__label  event__type-output" for="event-destination-1">
         ${capitalizeType(tripPoint.type)}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
-        <datalist id="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-${tripPoint.id}">
+        <datalist id="destination-list-${tripPoint.id}">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
           <option value="Chamonix"></option>
@@ -103,19 +104,19 @@ function createCreatingFormTemplate(tripPoint) {
       </div>
 
       <div class="event__field-group  event__field-group--time">
-        <label class="visually-hidden" for="event-start-time-1">From</label>
+        <label class="visually-hidden" for="event-start-time-${tripPoint.id}">From</label>
         <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormDate(tripPoint.dateFrom)} 00:00">
         &mdash;
-        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <label class="visually-hidden" for="event-end-time-${tripPoint.id}">To</label>
         <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormDate(tripPoint.dateFrom)} 00:00">
       </div>
 
       <div class="event__field-group  event__field-group--price">
-        <label class="event__label" for="event-price-1">
+        <label class="event__label" for="event-price-${tripPoint.id}">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+        <input class="event__input  event__input--price" id="event-price-${tripPoint.id}" type="text" name="event-price" value="">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -126,7 +127,7 @@ function createCreatingFormTemplate(tripPoint) {
         <h3 class="event__section-title  event__section-title--offers ${visibility}">Offers</h3>
 
         <div class="event__available-offers">
-        ${createOffersTemplate(tripPoint.offersIDs, tripPoint.type)}
+        ${createOffersTemplate(tripPoint.offersIDs, tripPoint.type, tripPoint.id)}
         </div>
       </section>
 
