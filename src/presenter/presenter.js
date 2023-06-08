@@ -1,6 +1,6 @@
 import SortView from '../view/sorting-view.js';
-import RoutePointItem from '../view/route-point-list-view.js';
-import RoutePointList from '../view/route-point-item-view.js';
+import RoutePointItem from '../view/route-point-item-view.js';
+import RoutePointList from '../view/route-point-list-view.js';
 import EditingForm from '../view/editing-form-view.js';
 import CreatingFormView from '../view/creating-form-view.js';
 import { render } from '../render.js';
@@ -13,8 +13,8 @@ export default class TripPresenter {
     this.boardContainer = tripContainer;
     this.tripPointsModel = tripPointsModel;
     this.routePointList = new RoutePointList();
+    this.eventListComponent = new RoutePointList();
   }
-
 
   init() {
     this.tripPoints = [...this.tripPointsModel.getTripPoints()];
@@ -25,17 +25,10 @@ export default class TripPresenter {
     const element = this.eventListComponent.getElement();
 
     render(new CreatingFormView(), element);
-    render(new RoutePointItem(), element);
     render(new EditingForm(), element);
 
     this.tripPoints.forEach((tripPoint) => {
-      render(new RoutePointItem({tripPoint}), element);
+      render(new RoutePointItem(tripPoint), element);
     });
-
-    const extraItemCount = 3;
-    for (let i = 0; i < extraItemCount; i++) {
-      render(new RoutePointItem(), element);
-    }
   }
 }
-

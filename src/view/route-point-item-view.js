@@ -54,7 +54,7 @@ function createRoutePointItemTemplate(eventPoint) {
 }
 
 export default class RoutePointItem {
-  constructor({tripPoint}) {
+  constructor(tripPoint) {
     this.tripPoint = tripPoint;
   }
 

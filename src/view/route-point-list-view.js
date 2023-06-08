@@ -1,5 +1,4 @@
 
-
 import { createElement } from '../render.js';
 
 function createRoutePointListTemplate() {
@@ -10,7 +9,7 @@ function createRoutePointListTemplate() {
 
 export default class RoutePointList {
   getTemplate() {
-    return createRoutePointListTemplate()();
+    return createRoutePointListTemplate();
   }
 
   getElement() {
