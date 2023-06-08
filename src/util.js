@@ -3,20 +3,38 @@ import dayjs from 'dayjs';
 const DATE_FORMAT = 'MMM D';
 const TIME_FORMAT = 'H:mm';
 const FULL_DATE_FORMAT = 'DD/MM/YY';
+const BASE_DATE_FORMAT = 'DD/MM/YY H:mm';
 
-const generateRandomElementFromArray = (items) => items[Math.floor(Math.random() * items.length)];
+export const getItemByIDFromItems = (items, id) => (items.find((item) => item.id === id));
 
-const generateRandomPrice = () => Math.floor(Math.random() * 1000) + 100;
 
-const generateRandomId = () => Math.floor(Math.random() * 100) + 1;
+export const generateRandomElementFromArray = (items) => items[Math.floor(Math.random() * items.length)];
 
-const generateRandomImage = () => `http://picsum.photos/248/152?r=${generateRandomId()}`;
+export const generateRandomPrice = () => Math.floor(Math.random() * 1000) + 100;
 
-const getTimeDate = (date) => date.substring(0, date.indexOf('T'));
-const getDateForm = (date) => dayjs(date).format(DATE_FORMAT);
-const getDateTime = (date) => date.substring(0, date.indexOf('.'));
-const getTimeFormat = (date) => dayjs(date).format(TIME_FORMAT);
-const getUpperCase = (type) => type.charAt(0).toUpperCase() + type.slice(1);
-const getFullFormDate = (date) => dayjs(date).format(FULL_DATE_FORMAT);
+export const generateRandomId = () => Math.floor(Math.random() * 100) + 1;
 
-export {generateRandomElementFromArray, generateRandomPrice, generateRandomId, generateRandomImage, getTimeDate, getDateForm, getDateTime, getTimeFormat, getUpperCase, getFullFormDate};
+export const generateRandomImage = () => `http://picsum.photos/248/152?r=${generateRandomId()}`;
+
+export const getRandomSliceFromItems = (items) => {
+  const n = Math.floor(Math.random() * (items.length + 1));
+  const shuffled = [...items].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+};
+
+export const createIDgenerator = () => {
+  let id = 0;
+  return () => ++id;
+};
+
+export const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export const getEventDateTime = (date) => date.substring(0, date.indexOf('T'));
+export const getEventDate = (date) => dayjs(date).format(DATE_FORMAT);
+export const getDateTime = (date) => date.substring(0, date.indexOf('.'));
+export const getTime = (date) => dayjs(date).format(TIME_FORMAT);
+export const getBasicime = (date) => dayjs(date).format(BASE_DATE_FORMAT);
+export const capitalizeType = (type) => type.charAt(0).toUpperCase() + type.slice(1);
+export const getFormDate = (date) => dayjs(date).format(FULL_DATE_FORMAT);
+
+
