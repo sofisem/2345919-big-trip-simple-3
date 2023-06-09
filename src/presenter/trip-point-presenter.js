@@ -2,6 +2,8 @@ import { replace, remove } from '../framework/render';
 import RoutePointItemView from '../view/route-point-item-view';
 import EditingForm from '../view/editing-form-view';
 import { isEscapeKey } from '../utils/util.js';
+import { UserAction, UpdateType } from '../const';
+import { areDatesEqual } from '../utils/format-time-utils';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -46,7 +48,8 @@ export default class TripPointPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
-      onRollUpButton: this.#handleRollupButtonClick
+      oonRollUpButton: this.#handleRollupButtonClick,
+      onDeleteClick: this.#handleDeleteClick
     });
 
     switch (this.#mode) {
@@ -102,8 +105,13 @@ export default class TripPointPresenter {
     document.body.addEventListener('keydown', this.#ecsKeyDownHandler);
   };
 
-  #handleFormSubmit = (tripPoint) => {
-    this.#handleDataChange(tripPoint);
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate = !areDatesEqual(this.#tripPoint.dateFrom, update.dateFrom) || this.#tripPoint.basePrice !== update.basePrice;
+    this.#handleDataChange(
+      UserAction.UPDATE_TRIPPOINT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
     this.#replaceFormToPoint();
     document.body.removeEventListener('keydown', this.#ecsKeyDownHandler);
   };
@@ -113,6 +121,14 @@ export default class TripPointPresenter {
     this.#replaceFormToPoint();
     document.body.removeEventListener('keydown', this.#ecsKeyDownHandler);
     this.#editFormComponent.reset(this.#tripPoint);
+  };
+
+  #handleDeleteClick = (tripPoint) => {
+    this.#handleDataChange(
+      UserAction.DELETE_TRIPPOINT,
+      UpdateType.MINOR,
+      tripPoint,
+    );
   };
 
 }

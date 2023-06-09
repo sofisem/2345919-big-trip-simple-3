@@ -7,7 +7,7 @@ import { capitalizeType } from '../utils/util.js';
 
 function createSortingItemTemplate(sortType) {
   return `
-  <div class="trip-sort__item  trip-sort__item--${sortType}">
+  <div class="trip-sort__item  trip-sort__item--${sortType} ">
   <input id="sort-${sortType}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sortType}" ${isDisabled(sortType)} ${(sortType === 'day' ? 'checked' : '')}>
     <label class="trip-sort__btn" for="sort-${sortType}">${capitalizeType(sortType)}</label>
   </div>`;
@@ -24,18 +24,23 @@ function createSortingTemplate() {
 
 export default class SortView extends AbstractView{
 
+  #currentSortType = null;
+
+  constructor({currentSortType, onSortTypeChange}) {
+    super();
+    this.#currentSortType = currentSortType;
+    this._callback.onSortTypeChange = onSortTypeChange;
+    this.element.addEventListener('change', this.#sortTypeChangeHandler);
+  }
+
   get template() {
     return createSortingTemplate();
   }
 
-  setSortTypeChangeHandler = (callback) => {
-    this._callback.sortTypeChange = callback;
-    this.element.addEventListener('change', this.#sortTypeChangeHandler);
-  };
 
   #sortTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.value);
+    this._callback.onSortTypeChange(evt.target.value);
   };
 
 }
