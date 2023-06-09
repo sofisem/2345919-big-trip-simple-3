@@ -1,11 +1,21 @@
 import Observable from '../framework/observable';
 
 export default class DestinationsModel extends Observable {
-  #destinations = null;
+  #tripPointApi = null;
+  #destinations = [];
 
-  constructor (destinations) {
+  constructor (tripPointApi) {
     super();
-    this.#destinations = destinations;
+    this.#tripPointApi = tripPointApi;
+    this.init();
+  }
+
+  async init() {
+    try {
+      this.#destinations = await this.#tripPointApi.destinations;
+    } catch(err) {
+      this.#destinations = [];
+    }
   }
 
 

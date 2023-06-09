@@ -1,9 +1,16 @@
 const FilterType = {
   EVERYTHING: 'everything',
-  FUTURE: 'future'
+  FUTURE: 'future',
+  PAST: 'past'
 };
 
-const SortTypeForDrawing = {
+const FilterTypeDescriptions = {
+  [FilterType.EVERYTHING]: 'EVERYTHING',
+  [FilterType.PAST]: 'PAST',
+  [FilterType.FUTURE]: 'FUTURE',
+};
+
+const SortType = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -11,12 +18,12 @@ const SortTypeForDrawing = {
   OFFER: 'offer'
 };
 
-const SortType = {
-  DAY: 'sort-day',
-  EVENT: 'sort-event',
-  TIME: 'sort-time',
-  PRICE: 'sort-price',
-  OFFER: 'sort-offer'
+const SortTypeDescription = {
+  [SortType.DAY]: 'Day',
+  [SortType.EVENT]: 'Event',
+  [SortType.TIME]: 'Time',
+  [SortType.PRICE]: 'Price',
+  [SortType.OFFER]: 'Offer'
 };
 
 const UserAction = {
@@ -29,6 +36,10 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT'
 };
 
-export {SortType, FilterType, SortTypeForDrawing, UserAction, UpdateType};
+const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+
+
+export {SortType, FilterType, SortTypeDescription, UserAction, UpdateType, FilterTypeDescriptions, EVENT_TYPES};
