@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 const DATE_FORMAT = 'MMM D';
 const TIME_FORMAT = 'H:mm';
 const FULL_DATE_FORMAT = 'DD/MM/YY';
-const BASE_DATE_FORMAT = 'DD/MM/YY H:mm';
+const BASE_DATE_FORMAT = 'DD/MM/YY HH:mm';
 
 
 export const getEventDateTime = (date) => date.substring(0, date.indexOf('T'));
