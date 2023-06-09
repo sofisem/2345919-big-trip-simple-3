@@ -26,6 +26,7 @@ const SortTypeDescription = {
   [SortType.OFFER]: 'Offer'
 };
 
+
 const UserAction = {
   UPDATE_TRIPPOINT: 'UPDATE_TRIPPOINT',
   ADD_TRIPPOINT: 'ADD_TRIPPOINT',
@@ -36,10 +37,9 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
-  INIT: 'INIT'
+  INIT: 'INIT',
 };
 
-const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const pointTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
-
-export {SortType, FilterType, SortTypeDescription, UserAction, UpdateType, FilterTypeDescriptions, EVENT_TYPES};
+export {SortType, FilterTypeDescriptions, SortTypeDescription, UserAction, UpdateType, FilterType, pointTypes};

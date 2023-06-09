@@ -1,8 +1,7 @@
 import { render, remove, RenderPosition } from '../framework/render';
-import EditingForm from '../view/editing-form-view';
-import { isEscapeKey } from '../utils/util.js';
+import EditFormView from '../view/editing-form-view';
+import { isEscapeKey } from '../utils/util';
 import { UserAction, UpdateType } from '../const';
-
 
 export default class NewTripPointPresenter {
   #handleDataChange = null;
@@ -22,7 +21,7 @@ export default class NewTripPointPresenter {
       return;
     }
 
-    this.#tripPointEditComponent = new EditingForm({
+    this.#tripPointEditComponent = new EditFormView({
       destinations: destinations,
       offers: offers,
       onFormSubmit: this.#handleFormSubmit,
@@ -57,7 +56,6 @@ export default class NewTripPointPresenter {
     }
   };
 
-
   setSaving() {
     this.#tripPointEditComponent.updateElement({
       isDisabled: true,
@@ -76,7 +74,6 @@ export default class NewTripPointPresenter {
 
     this.#tripPointEditComponent.shake(resetFormState);
   }
-
 
   #handleFormSubmit = (tripPoint) => {
     this.#handleDataChange(

@@ -1,25 +1,25 @@
 
-import AbstractView from '../framework/view/abstract-view.js';
-import { isDisabled } from '../utils/sorts.js';
+import AbstractView from '../framework/view/abstract-view';
 import { SortType, SortTypeDescription } from '../const';
+import { isDisabled } from '../utils/sorts';
 
-const createSortingItemTemplate = (sortType, currentSortType) => (`
+const createSortItemTemplate = (sortType, currentSortType) => (`
   <div class="trip-sort__item  trip-sort__item--${sortType} ">
-  <input id="${sortType}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${sortType}" ${isDisabled(sortType)} ${((sortType === currentSortType) ? 'checked' : '')}>
+    <input id="${sortType}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${sortType}" ${isDisabled(sortType)} ${((sortType === currentSortType) ? 'checked' : '')}>
     <label class="trip-sort__btn" for="${sortType}">${SortTypeDescription[sortType]}</label>
-  </div>`);
+  </div>`
+);
 
-
-const createSortingTemplate = (currentSortType) => {
-  const sortItemsTemplate = Object.keys(SortType).map((sortType) => createSortingItemTemplate(SortType[sortType]), currentSortType).join('');
-  return (
-    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+const createSortTemplate = (currentSortType) => {
+  const sortItemsTemplate = Object.keys(SortType).map((sortType) => createSortItemTemplate(SortType[sortType], currentSortType)).join('');
+  return (`
+  <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     ${sortItemsTemplate}
-    </form>`
+  </form>`
   );
 };
 
-export default class SortView extends AbstractView{
+export default class SortView extends AbstractView {
 
   #currentSortType = null;
 
@@ -31,14 +31,13 @@ export default class SortView extends AbstractView{
   }
 
   get template() {
-    return createSortingTemplate(this.#currentSortType);
+    return createSortTemplate(this.#currentSortType);
   }
-
 
   #sortTypeChangeHandler = (evt) => {
     evt.preventDefault();
     this._callback.onSortTypeChange(evt.target.value);
   };
 
-}
 
+}

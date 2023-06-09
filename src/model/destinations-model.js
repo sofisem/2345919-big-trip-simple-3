@@ -1,18 +1,18 @@
 import Observable from '../framework/observable';
 
 export default class DestinationsModel extends Observable {
-  #tripPointApi = null;
+  #tripPointApiService = null;
   #destinations = [];
 
-  constructor (tripPointApi) {
+  constructor ({tripPointApiService}) {
     super();
-    this.#tripPointApi = tripPointApi;
+    this.#tripPointApiService = tripPointApiService;
     this.init();
   }
 
   async init() {
     try {
-      this.#destinations = await this.#tripPointApi.destinations;
+      this.#destinations = await this.#tripPointApiService.destinations;
     } catch(err) {
       this.#destinations = [];
     }
@@ -22,4 +22,6 @@ export default class DestinationsModel extends Observable {
   get destinations() {
     return this.#destinations;
   }
+
+
 }
