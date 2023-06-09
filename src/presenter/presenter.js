@@ -6,7 +6,7 @@ import RoutePointListView from '../view/route-point-list-view.js';
 import { SortType } from '../const';
 import { sorts } from '../utils/sorts';
 import EditingForm from '../view/editing-form-view.js';
-
+import { updateItem } from '../utils/util.js';
 export default class TripPresenter {
   #tripContainer = null;
   #tripPointsModel = null;
@@ -35,6 +35,12 @@ export default class TripPresenter {
     this.#sourcedTripPoints = [...this.#tripPointsModel.tripPoints];
   }
 
+  #handleTripPointChange = (updatedTripPoint) => {
+    this.#tripPoints = updateItem(this.#tripPoints, updatedTripPoint);
+    this.#tripPointPresenter.get(updatedTripPoint.id).init(updatedTripPoint, this.#destinations, this.#offers);
+  };
+
+
   #renderSort() {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
@@ -54,15 +60,11 @@ export default class TripPresenter {
   }
 
   #handleSortTypeChange = (sortType) => {
-    // - сортируем задачи
     if (this.#currentSortType === sortType) {
       return;
     }
 
     this.#sortTripPoints(sortType);
-
-    // - очищаем список
-    // - рисуем ему заново
     this.#clearTripPointList();
     this.#renderTripPoints();
   };
@@ -76,7 +78,8 @@ export default class TripPresenter {
   #renderTripPoint(tripPoint) {
     const tripPoinPresenter = new TripPointPresenter({
       tripPointList: this.#tripPointsListComponent.element,
-      onModeChange: this.#handleModeChange
+      onModeChange: this.#handleModeChange,
+      onDataChange: this.#handleTripPointChange
     });
 
     tripPoinPresenter.init(tripPoint, this.#destinations, this.#offers);
@@ -98,8 +101,7 @@ export default class TripPresenter {
     }
     this.#renderSort();
 
-    render(new EditingForm({tripPoint: this.#tripPoints[0], destinations: this.#destinations, offers: this.#offers, isEditForm: false}), this.#tripPointsListComponent.element);
-    this.#renderTripPoints();
+    render(new EditingForm({destinations: this.#destinations, offers: this.#offers, isEditForm: false}), this.#tripPointsListComponent.element);
 
   }
 
