@@ -2,9 +2,10 @@
 
 import { getItemByIDFromItems, capitalizeType } from '../utils/util.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { EVENT_TYPES } from '../mock/const.js';
+import { EVENT_TYPES } from '../const.js';
 import { getBasicime } from '../utils/format-time-utils.js';
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -16,7 +17,7 @@ const BLANK_TRIPPOINT = {
 
   destination: undefined,
   id: 0,
-  offersIDs: [2, 4],
+  offersIDs: [],
   type: 'flight'
 };
 
@@ -63,7 +64,7 @@ const createEventDetailsTemplate = (tripPoint, destination, offers) => {
   </section>
   <section class="event__section  event__section--destination ${(destination) ? '' : 'visually-hidden'}">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${(destination) ? destination.description : ''}</p>
+    <p class="event__destination-description">${destination.description}</p>
     ${createDestinationDescriptionTemplate(destination)}
   </section>`;
 };
@@ -91,6 +92,9 @@ const createDestinationList = (destinations) => (destinations
   .join(''));
 
 const createEditFormTemplate = (tripPoint, destinations, offers, isEditForm) => {
+  if (!tripPoint.destination) {
+    tripPoint.destination = destinations[0].id;
+  }
   const destination = getItemByIDFromItems(destinations, tripPoint.destination);
 
   return (
@@ -117,7 +121,7 @@ const createEditFormTemplate = (tripPoint, destinations, offers, isEditForm) => 
           <label class="event__label event__type-output" for="event-destination-1">
           ${capitalizeType(tripPoint.type)}
           </label>
-          <input class="event__input event__input--destination" id="event-destination-${tripPoint.id}" type="text" name="event-destination" value="${(destination) ? destination.name : ''}" list="destination-list-${tripPoint.id}" autocomplete="off">
+          <input class="event__input event__input--destination" id="event-destination-${tripPoint.id}" type="text" name="event-destination" value="${he.encode(destination.name) }" list="destination-list-${tripPoint.id}" autocomplete="off">
           <datalist id="destination-list-${tripPoint.id}">
             <${createDestinationList(destinations)}
           </datalist>
@@ -136,7 +140,7 @@ const createEditFormTemplate = (tripPoint, destinations, offers, isEditForm) => 
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input event__input--price" id="event-price-${tripPoint.id}" type="number" name="event-price" value="${tripPoint.basePrice}">
+          <input class="event__input event__input--price" id="event-price-${tripPoint.id}" type="number" name="event-price" value="${tripPoint.basePrice}" autocomplete="off" min="0" max="9999999" >
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -219,6 +223,9 @@ export default class EditingForm extends AbstractStatefulView{
   }
 
   #fromDateChangeHandler = ([userDate]) => {
+    if (!userDate) {
+      return;
+    }
     this._setState({
       dateFrom: userDate.toISOString(),
     });
@@ -227,6 +234,9 @@ export default class EditingForm extends AbstractStatefulView{
 
 
   #toDateChangeHandler = ([userDate]) => {
+    if (!userDate) {
+      return;
+    }
     this._setState({
       dateTo: userDate.toISOString(),
     });
@@ -282,9 +292,13 @@ export default class EditingForm extends AbstractStatefulView{
   };
 
   #destinationHandler = (evt) => {
+    const newDest = this.#destinations.find((destination) => destination.name === evt.target.value);
+    if (!newDest) {
+      return;
+    }
     evt.preventDefault();
     this.updateElement({
-      destination: this.#destinations.find((destination) => destination.name === evt.target.value).id,
+      destination: newDest.id,
     });
   };
 
@@ -317,9 +331,8 @@ export default class EditingForm extends AbstractStatefulView{
   }
 
   static parseStateToTripPoint(state) {
-    const task = {...state};
-
-    delete task.currentTypeOffers;
-    return task;
+    const tripPoint = {...state};
+    delete tripPoint.currentTypeOffers;
+    return tripPoint;
   }
 }
