@@ -1,4 +1,4 @@
-import { render, replace, remove } from '../framework/render';
+import { replace, remove } from '../framework/render';
 import RoutePointItemView from '../view/route-point-item-view';
 import EditingForm from '../view/editing-form-view';
 import { isEscapeKey } from '../utils/util.js';
@@ -16,6 +16,8 @@ export default class TripPointPresenter {
   #tripPointComponent = null;
 
   #tripPoint = null;
+  #destinations = null;
+  #offers = null;
   #mode = Mode.DEFAULT;
 
   constructor({tripPointList, onModeChange}) {
@@ -23,29 +25,34 @@ export default class TripPointPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  init(tripPoint) {
+  init(tripPoint, destinations, offers) {
     this.#tripPoint = tripPoint;
+    this.#destinations = destinations;
+    this.#offers = offers;
 
     const prevTripPointComponent = this.#tripPointComponent;
     const prevEditFormComponent = this.#editFormComponent;
 
     this.#tripPointComponent = new RoutePointItemView({
       tripPoint: this.#tripPoint,
+      destinations: this.#destinations,
+      offers: this.#offers,
       onEditClick: this.#handleEditClick
     });
 
     this.#editFormComponent = new EditingForm({
-      tripPoint,
+      tripPoint: this.#tripPoint,
+      destinations: this.#destinations,
+      offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit
     });
 
-    if (prevTripPointComponent === null || prevEditFormComponent === null) {
-      render(this.#tripPointComponent, this.#tripPointList);
-      return;
-    }
-
-    if (this.#mode === Mode.DEFAULT) {
-      replace(this.#tripPointComponent, prevTripPointComponent);
+    switch (this.#mode) {
+      case Mode.DEFAULT:
+        replace(this.#tripPointComponent, prevTripPointComponent);
+        break;
+      case Mode.EDITING:
+        replace(this.#editFormComponent, prevEditFormComponent);
     }
 
     if (this.#mode === Mode.EDITING) {
@@ -63,6 +70,7 @@ export default class TripPointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#editFormComponent.reset(this.#tripPoint);
       this.#replaceFormToPoint();
     }
   }
@@ -81,6 +89,7 @@ export default class TripPointPresenter {
   #ecsKeyDownHandler = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
+      this.#editFormComponent.reset(this.#tripPoint);
       this.#replaceFormToPoint();
       document.body.removeEventListener('keydown', this.#ecsKeyDownHandler);
     }
@@ -95,7 +104,7 @@ export default class TripPointPresenter {
   #handleFormSubmit = () => {
     this.#replaceFormToPoint();
     document.body.removeEventListener('keydown', this.#ecsKeyDownHandler);
+    this.#editFormComponent.reset(this.#tripPoint);
   };
-
 
 }

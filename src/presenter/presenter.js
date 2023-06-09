@@ -1,23 +1,26 @@
 import SortView from '../view/sorting-view.js';
-import CreatingFormView from '../view/creating-form-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import {RenderPosition, render} from '../framework/render.js';
 import TripPointPresenter from './trip-point-presenter';
 import RoutePointListView from '../view/route-point-list-view.js';
-import { SortType } from '../mock/const.js';
-import { sortPointsByDate, sortPointsByPrice } from '../utils/sorts.js';
+import { SortType } from '../const';
+import { sorts } from '../utils/sorts';
+import EditingForm from '../view/editing-form-view.js';
 
 export default class TripPresenter {
   #tripContainer = null;
   #tripPointsModel = null;
   #tripPoints = null;
-  #currentSortType = SortType.DAY;
-  #sourcedTripPoints = [];
+  #destinations = null;
+  #offers = null;
 
   #tripPointsListComponent = new RoutePointListView();
   #noTripPointComponent = new NoPointsView();
   #sortComponent = new SortView();
   #tripPointPresenter = new Map();
+  #currentSortType = SortType.DAY;
+  #sourcedTripPoints = [];
+
 
   constructor({tripContainer, tripPointsModel}) {
     this.#tripContainer = tripContainer;
@@ -26,6 +29,8 @@ export default class TripPresenter {
 
   init() {
     this.#tripPoints = [...this.#tripPointsModel.tripPoints];
+    this.#destinations = [...this.#tripPointsModel.destinations];
+    this.#offers = [...this.#tripPointsModel.offers];
     this.#renderBoard();
     this.#sourcedTripPoints = [...this.#tripPointsModel.tripPoints];
   }
@@ -40,15 +45,10 @@ export default class TripPresenter {
   }
 
   #sortTripPoints(sortType) {
-    switch (sortType) {
-      case SortType.PRICE:
-        this.#tripPoints.sort(sortPointsByPrice);
-        break;
-      case SortType.TIME:
-        this.#tripPoints.sort(sortPointsByDate);
-        break;
-      default:
-        this.#tripPoints = [...this.#sourcedTripPoints];
+    if (sorts[sortType]) {
+      this.#tripPoints.sort(sorts[sortType]);
+    } else {
+      this.#tripPoints = [...this.#sourcedTripPoints];
     }
     this.#currentSortType = sortType;
   }
@@ -64,7 +64,7 @@ export default class TripPresenter {
     // - очищаем список
     // - рисуем ему заново
     this.#clearTripPointList();
-    this.#renderTripPointsList();
+    this.#renderTripPoints();
   };
 
 
@@ -79,30 +79,27 @@ export default class TripPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    tripPoinPresenter.init(tripPoint);
+    tripPoinPresenter.init(tripPoint, this.#destinations, this.#offers);
     this.#tripPointPresenter.set(tripPoint.id, tripPoinPresenter);
   }
 
 
   #renderTripPoints() {
+    render(this.#tripPointsListComponent, this.#tripContainer);
     this.#tripPoints.forEach((tripPoint) => this.#renderTripPoint(tripPoint));
   }
 
-  #renderTripPointsList() {
-    render(this.#tripPointsListComponent, this.#tripContainer);
-    this.#renderTripPoints();
-  }
 
   #renderBoard() {
 
     if (this.#tripPoints.length === 0) {
-      render(this.#renderNoTripPoints, this.#tripContainer);
+      this.#renderNoTripPoints();
       return;
     }
     this.#renderSort();
 
-    render(new CreatingFormView(this.#tripPoints[0]), this.#tripPointsListComponent.element);
-    this.#renderTripPointsList();
+    render(new EditingForm({tripPoint: this.#tripPoints[0], destinations: this.#destinations, offers: this.#offers, isEditForm: false}), this.#tripPointsListComponent.element);
+    this.#renderTripPoints();
 
   }
 
