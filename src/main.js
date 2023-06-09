@@ -6,7 +6,7 @@ import {render} from './framework/render.js';
 import NewTripPointButtonView from './view/new-trip-point-button.js';
 import TripPresenter from './presenter/presenter.js';
 import TripPointModel from './model/point-model.js';
-import TripPointApiService from './presenter/trip-point-api.js';
+import TripPointApiService from './api/trip-point-api.js';
 
 const AUTHORIZATION = 'Basic ssssmnv6666';
 const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';

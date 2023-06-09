@@ -2,7 +2,6 @@ import { render, remove, RenderPosition } from '../framework/render';
 import EditingForm from '../view/editing-form-view';
 import { isEscapeKey } from '../utils/util.js';
 import { UserAction, UpdateType } from '../const';
-import { nanoid } from 'nanoid';
 
 
 export default class NewTripPointPresenter {
@@ -58,20 +57,44 @@ export default class NewTripPointPresenter {
     }
   };
 
+
+  setSaving() {
+    this.#tripPointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#tripPointEditComponent.updateElement({
+        isDisabled: false,
+        isSavinf: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#tripPointEditComponent.shake(resetFormState);
+  }
+
+
   #handleFormSubmit = (tripPoint) => {
     this.#handleDataChange(
       UserAction.ADD_TRIPPOINT,
       UpdateType.MINOR,
 
-      {id: nanoid(), ...tripPoint}
+      this.#deleteId(tripPoint)
     );
 
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
     this.destroy();
   };
 
+  #deleteId = (tripPoint) => {
+    delete tripPoint.id;
+    return tripPoint;
+  };
 
 }
