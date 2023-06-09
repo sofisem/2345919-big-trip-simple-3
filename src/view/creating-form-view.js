@@ -1,7 +1,7 @@
 import { destinations } from '../mock/destination.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { capitalizeType, getItemByIDFromItems} from '../utils/util.js';
-import { getOffersByType } from '../mock/offers.js';
+import { getOffersByType } from '../utils/offers.js';
 import { getFormDate } from '../utils/format-time-utils.js';
 
 

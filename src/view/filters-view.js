@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { FilterType } from '../mock/const.js';
+import { FilterType } from '../const.js';
 import { capitalizeType } from '../utils/util.js';
 
 function createFiltersItemTemplate(filterType) {

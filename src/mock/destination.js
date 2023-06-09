@@ -1,22 +1,22 @@
 
-import { generateRandomElementFromArray, createIDgenerator } from '../utils/util.js';
+import { generateRandomElementFromArray, createIDgenerator, getRandomImageId} from '../utils/util.js';
 import { DESCRIPTIONS, NAMES_OF_CITIES} from './const';
 
 
 const destinations = [];
-const generateImageId = createIDgenerator();
-const generatePictures = () => {
+function generatePictures() {
   const images = [];
-  for (let i = 0; i < 6; i++) {
+  let i = 0;
+  while (i < 6) {
     const image = {
-      src: `img/photos/${generateImageId()}.jpg`,
+      src: `img/photos/${getRandomImageId()}.jpg`,
       description: generateRandomElementFromArray(DESCRIPTIONS)
     };
     images.push(image);
+    i++;
   }
   return images;
-};
-
+}
 
 const generateDestinationId = createIDgenerator();
 
@@ -30,6 +30,7 @@ const generateDestinations = (n) => {
     };
     destinations.push(destination);
   }
+  return destinations;
 };
 
 
