@@ -1,9 +1,9 @@
-import { replace, remove } from '../framework/render';
-import RoutePointItemView from '../view/route-point-item-view';
-import EditingForm from '../view/editing-form-view';
-import { isEscapeKey } from '../utils/util.js';
+import { render, replace, remove } from '../framework/render';
+import TripPointView from '../view/route-point-item-view';
+import EditFormView from '../view/editing-form-view';
+import { isEscapeKey } from '../utils/util';
 import { UserAction, UpdateType } from '../const';
-import { areDatesEqual } from '../utils/format-time-utils';
+import { isDatesEqual } from '../utils/time-format';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -13,6 +13,7 @@ const Mode = {
 export default class TripPointPresenter {
   #handleModeChange = null;
   #handleDataChange = null;
+
   #tripPointList = null;
   #editFormComponent = null;
   #tripPointComponent = null;
@@ -36,21 +37,26 @@ export default class TripPointPresenter {
     const prevTripPointComponent = this.#tripPointComponent;
     const prevEditFormComponent = this.#editFormComponent;
 
-    this.#tripPointComponent = new RoutePointItemView({
+    this.#tripPointComponent = new TripPointView({
       tripPoint: this.#tripPoint,
       destinations: this.#destinations,
       offers: this.#offers,
-      onEditClick: this.#handleEditClick
+      onEditClick: this.#handleEditClick,
     });
 
-    this.#editFormComponent = new EditingForm({
+    this.#editFormComponent = new EditFormView({
       tripPoint: this.#tripPoint,
       destinations: this.#destinations,
       offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
-      oonRollUpButton: this.#handleRollupButtonClick,
+      onRollUpButton: this.#handleRollupButtonClick,
       onDeleteClick: this.#handleDeleteClick
     });
+
+    if (prevTripPointComponent === null || prevEditFormComponent === null) {
+      render(this.#tripPointComponent, this.#tripPointList);
+      return;
+    }
 
     switch (this.#mode) {
       case Mode.DEFAULT:
@@ -59,10 +65,6 @@ export default class TripPointPresenter {
       case Mode.EDITING:
         replace(this.#tripPointComponent, prevEditFormComponent);
         this.#mode = Mode.DEFAULT;
-    }
-
-    if (this.#mode === Mode.EDITING) {
-      replace(this.#editFormComponent, prevEditFormComponent);
     }
 
     remove(prevEditFormComponent);
@@ -114,6 +116,7 @@ export default class TripPointPresenter {
   #ecsKeyDownHandler = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
+      this.#editFormComponent.reset(this.#tripPoint);
       this.#replaceFormToPoint();
       document.body.removeEventListener('keydown', this.#ecsKeyDownHandler);
     }
@@ -143,7 +146,7 @@ export default class TripPointPresenter {
   }
 
   #handleFormSubmit = (update) => {
-    const isMinorUpdate = !areDatesEqual(this.#tripPoint.dateFrom, update.dateFrom) || this.#tripPoint.basePrice !== update.basePrice;
+    const isMinorUpdate = !isDatesEqual(this.#tripPoint.dateFrom, update.dateFrom) || this.#tripPoint.basePrice !== update.basePrice;
     this.#handleDataChange(
       UserAction.UPDATE_TRIPPOINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
@@ -153,8 +156,8 @@ export default class TripPointPresenter {
   };
 
   #handleRollupButtonClick = () => {
-    this.#replaceFormToPoint();
     this.#editFormComponent.reset(this.#tripPoint);
+    this.#replaceFormToPoint();
   };
 
   #handleDeleteClick = (tripPoint) => {
@@ -164,5 +167,6 @@ export default class TripPointPresenter {
       tripPoint,
     );
   };
+
 
 }
