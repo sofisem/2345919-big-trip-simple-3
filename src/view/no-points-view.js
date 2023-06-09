@@ -7,10 +7,10 @@ const NoTaskTextType = {
 };
 
 
-function createNoPointsTemplate (filterType) {
+const createNoPointsTemplate = (filterType)=>{
   const noTaskTextValue = NoTaskTextType[filterType];
   return `<p class="trip-events__msg">${noTaskTextValue}</p>`;
-}
+};
 
 export default class NoPointsView extends AbstractView {
   #filterType = null;

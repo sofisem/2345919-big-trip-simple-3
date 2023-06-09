@@ -1,6 +1,13 @@
 const FilterType = {
   EVERYTHING: 'everything',
-  FUTURE: 'future'
+  FUTURE: 'future',
+  PAST: 'past'
+};
+
+const FilterTypeDescriptions = {
+  [FilterType.EVERYTHING]: 'EVERYTHING',
+  [FilterType.PAST]: 'PAST',
+  [FilterType.FUTURE]: 'FUTURE',
 };
 
 const SortTypeForDrawing = {
@@ -31,4 +38,4 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export {SortType, FilterType, SortTypeForDrawing, UserAction, UpdateType};
+export {SortType, FilterType, SortTypeForDrawing, UserAction, UpdateType, FilterTypeDescriptions};

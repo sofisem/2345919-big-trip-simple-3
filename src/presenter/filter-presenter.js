@@ -1,6 +1,6 @@
 import {render, replace, remove} from '../framework/render.js';
 import FiltersView from '../view/filters-view.js';
-import {FilterType, UpdateType} from '../const.js';
+import {FilterType, FilterTypeDescriptions, UpdateType} from '../const.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -19,16 +19,7 @@ export default class FilterPresenter {
   }
 
   get filters() {
-    return [
-      {
-        type: FilterType.EVERYTHING,
-        name: 'EVERYTHING'
-      },
-      {
-        type: FilterType.FUTURE,
-        name: 'FUTURE'
-      }
-    ];
+    return [FilterType.EVERYTHING, FilterType.FUTURE, FilterType.PAST].map((type) => ({ type, name: FilterTypeDescriptions[type]}));
   }
 
   init() {

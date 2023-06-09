@@ -9,7 +9,7 @@ import TripPointModel from './model/point-model.js';
 import { mockInit } from './mock/util.js';
 import { offersByType } from './mock/const.js';
 
-const eventsTemplate = document.querySelector('.trip-events');
+const tripContainer = document.querySelector('.trip-events');
 const filtersTemlate = document.querySelector('.trip-controls__filters');
 const siteHeaderElement = document.querySelector('.trip-main');
 
@@ -20,8 +20,18 @@ const destinationsModel = new DestinationsModel(destinations);
 const offersModel = new OffersModel(offersByType);
 const filterModel = new FilterModel();
 
-const tripPresenter = new TripPresenter({boardContainer: eventsTemplate,
-  tripPointsModel, destinationsModel, offersModel, filterModel, onNewTripPointDestroy: handleNewTripPointFormClose});
+const newTripPointButtonComponent = new NewTripPointButtonView({
+  onClick: handleNewTripPointButtonClick
+});
+
+const tripPresenter = new TripPresenter({
+  tripContainer,
+  tripPointsModel,
+  destinationsModel,
+  offersModel,
+  filterModel,
+  onNewTripPointDestroy
+});
 
 const filterPresenter = new FilterPresenter({
   filterContainer: filtersTemlate,
@@ -29,19 +39,16 @@ const filterPresenter = new FilterPresenter({
   tripPointsModel
 });
 
-const newTripPointButtonComponent = new NewTripPointButtonView({
-  onClick: handleNewTripPointButtonClick
-});
-
-function handleNewTripPointFormClose() {
-  newTripPointButtonComponent.element.disabled = false;
-}
-
 
 function handleNewTripPointButtonClick() {
   tripPresenter.createTripPoint();
   newTripPointButtonComponent.element.disabled = true;
 }
+
+function onNewTripPointDestroy() {
+  newTripPointButtonComponent.element.disabled = false;
+}
+
 render(newTripPointButtonComponent, siteHeaderElement);
 filterPresenter.init();
 tripPresenter.init();

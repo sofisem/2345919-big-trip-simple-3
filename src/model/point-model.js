@@ -1,6 +1,6 @@
 import Observable from '../framework/observable';
 export default class TripPointModel extends Observable {
-  #tripPoints = null;
+  #tripPoints = [];
 
 
   constructor (tripPoints) {

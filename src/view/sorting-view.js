@@ -5,22 +5,21 @@ import { isDisabled } from '../utils/sorts.js';
 import { SortTypeForDrawing } from '../const';
 import { capitalizeType } from '../utils/util.js';
 
-function createSortingItemTemplate(sortType) {
-  return `
+const createSortingItemTemplate = (sortType) => (`
   <div class="trip-sort__item  trip-sort__item--${sortType} ">
   <input id="sort-${sortType}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sortType}" ${isDisabled(sortType)} ${(sortType === 'day' ? 'checked' : '')}>
     <label class="trip-sort__btn" for="sort-${sortType}">${capitalizeType(sortType)}</label>
-  </div>`;
-}
+  </div>`);
 
-function createSortingTemplate() {
+
+const createSortingTemplate = () => {
   const sortItemsTemplate = Object.values(SortTypeForDrawing).map((sortType) => createSortingItemTemplate(sortType)).join('');
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     ${sortItemsTemplate}
     </form>`
   );
-}
+};
 
 export default class SortView extends AbstractView{
 

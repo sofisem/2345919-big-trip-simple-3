@@ -1,7 +1,7 @@
 import Observable from '../framework/observable';
 
 export default class OffersModel extends Observable {
-  #offers = null;
+  #offers = [];
 
   constructor (offers) {
     super();

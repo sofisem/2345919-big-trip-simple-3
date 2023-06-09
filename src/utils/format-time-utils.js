@@ -5,9 +5,8 @@ const TIME_FORMAT = 'H:mm';
 const FULL_DATE_FORMAT = 'DD/MM/YY';
 const BASE_DATE_FORMAT = 'DD/MM/YY HH:mm';
 
-export function areDatesEqual(dateA, dateB) {
-  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
-}
+
+export const areDatesEqual = (dateA, dateB) => (!dateA && !dateB) || dayjs(dateA).isSame(dateB, 'D');
 
 export const getEventDateTime = (date) => date.substring(0, date.indexOf('T'));
 export const getEventDate = (date) => dayjs(date).format(DATE_FORMAT);

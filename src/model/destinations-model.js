@@ -1,7 +1,7 @@
 import Observable from '../framework/observable';
 
 export default class DestinationsModel extends Observable {
-  #destinations = null;
+  #destinations = [];
 
   constructor (destinations) {
     super();

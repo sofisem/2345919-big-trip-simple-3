@@ -2,7 +2,7 @@ import { capitalizeType, getItemByIDFromItems } from '../utils/util.js';
 import { getEventDateTime, getEventDate, getDateTime, getTime } from '../utils/format-time-utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createOffersTemplate(offers, offersIDs, type) {
+const createOffersTemplate = (offers, offersIDs, type) => {
   const currentTypeOffers = offers.find((el) => el.type === type).offers;
   return currentTypeOffers.filter((el) => offersIDs.includes(el.id)).map((offer) => `<li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
@@ -10,9 +10,9 @@ function createOffersTemplate(offers, offersIDs, type) {
         <span class="event__offer-price">${offer.price}</span>
       </li>`
   ).join('');
-}
+};
 
-function createTripPointTemplate(tripPoint, destinations, offers) {
+const createTripPointTemplate = (tripPoint, destinations, offers) => {
   const destination = getItemByIDFromItems(destinations, tripPoint.destination);
   return (
     `<li class="trip-events__item">
@@ -42,7 +42,7 @@ function createTripPointTemplate(tripPoint, destinations, offers) {
     </div>
   </li>`
   );
-}
+};
 
 export default class RoutePointItemView extends AbstractView {
   #tripPoint = null;
